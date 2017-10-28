@@ -6,17 +6,8 @@ import (
 )
 
 func main() {
-	var cmd string
-
-	flag.StringVar(&cmd, "cmd", cmd, `cmd can be either "hello" or "bye"`)
 	flag.Parse()
 
-	switch cmd {
-	case "hello":
-		fmt.Println("Hello!")
-	case "bye":
-		fmt.Println("Bye!")
-	default:
-		flag.Usage()
-	}
+	// flag.Args contains all non-flag arguments.
+	fmt.Println(flag.Args())
 }
