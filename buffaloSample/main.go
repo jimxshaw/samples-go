@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-  "github.com/jimxshaw/testing/buffaloSample/actions"
-  "github.com/gobuffalo/envy"
+	"github.com/gobuffalo/envy"
+	"github.com/jimxshaw/testing/buffaloSample/actions"
 )
 
 func main() {
