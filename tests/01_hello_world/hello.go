@@ -8,12 +8,11 @@ const helloPrefix = "Hello, "
 
 // Hello prints out a string.
 func Hello(name string) string {
-
-	if len(name) > 0 {
-		return helloPrefix + name
+	if name == "" {
+		name = "James"
 	}
 
-	return helloPrefix + "World"
+	return helloPrefix + name
 }
 
 func main() {
