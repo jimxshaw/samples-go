@@ -7,14 +7,18 @@ import (
 const helloPrefix = "Hello, "
 
 // Hello prints out a string.
-func Hello(name string) string {
+func Hello(name string, language string) string {
 	if name == "" {
-		name = "James"
+		name = "World"
+	}
+
+	if language == "Spanish" {
+		return "Hola, " + name
 	}
 
 	return helloPrefix + name
 }
 
 func main() {
-	fmt.Println(Hello("James"))
+	fmt.Println(Hello("James", "Spanish"))
 }
