@@ -18,8 +18,14 @@ func Hello(name string, language string) string {
 		name = "World"
 	}
 
-	prefix := helloPrefix
+	return greetingPrefix(language) + name
+}
 
+func greetingPrefix(language string) (prefix string) {
+	// Having a named return value means a variable
+	// is declared by that name and assigned it's
+	// default value. Calling return is enough when
+	// using a named return value in the method signature.
 	switch language {
 	case spanish:
 		prefix = spanishHelloPrefix
@@ -27,9 +33,11 @@ func Hello(name string, language string) string {
 		prefix = frenchHelloPrefix
 	case chinese:
 		prefix = chineseHelloPrefix
+	default:
+		prefix = helloPrefix
 	}
 
-	return prefix + name
+	return
 }
 
 func main() {
