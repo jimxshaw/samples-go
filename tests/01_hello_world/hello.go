@@ -4,7 +4,13 @@ import (
 	"fmt"
 )
 
+const spanish = "Spanish"
+const french = "French"
+const chinese = "Chinese"
 const helloPrefix = "Hello, "
+const spanishHelloPrefix = "Hola, "
+const frenchHelloPrefix = "Bonjour, "
+const chineseHelloPrefix = "Ni hao, "
 
 // Hello prints out a string.
 func Hello(name string, language string) string {
@@ -12,13 +18,20 @@ func Hello(name string, language string) string {
 		name = "World"
 	}
 
-	if language == "Spanish" {
-		return "Hola, " + name
+	prefix := helloPrefix
+
+	switch language {
+	case spanish:
+		prefix = spanishHelloPrefix
+	case french:
+		prefix = frenchHelloPrefix
+	case chinese:
+		prefix = chineseHelloPrefix
 	}
 
-	return helloPrefix + name
+	return prefix + name
 }
 
 func main() {
-	fmt.Println(Hello("James", "Spanish"))
+	fmt.Println(Hello("James", chinese))
 }
