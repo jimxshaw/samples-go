@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestSum(t *testing.T) {
 	assertCorrectMessage := func(t *testing.T, got, want int, numbers []int) {
@@ -20,4 +23,13 @@ func TestSum(t *testing.T) {
 		assertCorrectMessage(t, got, want, numbers)
 	})
 
+}
+
+func TestSumAll(t *testing.T) {
+	got := SumAll([]int{1, 2}, []int{0, 9})
+	want := []int{3, 9}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
+	}
 }
