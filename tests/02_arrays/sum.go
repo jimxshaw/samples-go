@@ -17,3 +17,14 @@ func SumAll(numbersToSum ...[]int) (sums []int) {
 
 	return
 }
+
+// SumAllTails adds all number starting from second element
+// within a collection from all collections
+func SumAllTails(numbersToSum ...[]int) (sums []int) {
+	for _, numbers := range numbersToSum {
+		tail := numbers[1:]
+		sums = append(sums, Sum(tail))
+	}
+
+	return
+}
