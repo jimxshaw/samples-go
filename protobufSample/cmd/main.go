@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/golang/protobuf/proto"
+	"github.com/jimxshaw/samples-go/protobufSample/todo"
 )
 
 func main() {
@@ -33,10 +36,19 @@ func main() {
 
 }
 
+const dbPath = "mydb.pb"
+
 func list() error {
 	return nil
 }
 
 func add(text string) error {
+	task := &todo.Task{
+		Text: text,
+		Done: false,
+	}
+
+	fmt.Println(proto.MarshalTextString(task))
+
 	return nil
 }
