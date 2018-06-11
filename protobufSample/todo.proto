@@ -3,8 +3,8 @@ syntax = "proto3";
 package todo;
 
 message Task {
-  text string = 1;
-  done bool = 2;
+  string text = 1;
+  bool done = 2;
 }
 
 
