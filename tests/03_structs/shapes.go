@@ -7,6 +7,7 @@ import (
 // Shape has to have a way to calculate area.
 type Shape interface {
 	Area() float64
+	Perimeter() float64
 }
 
 // Rectangle must have a width and height.
@@ -20,6 +21,11 @@ func (r Rectangle) Area() float64 {
 	return r.Width * r.Height
 }
 
+// Perimeter finds the perimeter of a rectangle.
+func (r Rectangle) Perimeter() float64 {
+	return 2 * (r.Width + r.Height)
+}
+
 // Circle must have a radius.
 type Circle struct {
 	Radius float64
@@ -30,7 +36,7 @@ func (c Circle) Area() float64 {
 	return math.Pi * c.Radius * c.Radius
 }
 
-// Perimeter finds the perimeter of the shape.
-func Perimeter(rect Rectangle) float64 {
-	return 2 * (rect.Width + rect.Height)
+// Perimeter finds the circumference of a circle.
+func (c Circle) Perimeter() float64 {
+	return 2 * math.Pi * c.Radius
 }
