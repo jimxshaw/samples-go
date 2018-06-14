@@ -40,3 +40,21 @@ func (c Circle) Area() float64 {
 func (c Circle) Perimeter() float64 {
 	return 2 * math.Pi * c.Radius
 }
+
+// Triangle has 3 sides.
+type Triangle struct {
+	FirstSide  float64
+	SecondSide float64
+	Base       float64
+	Height     float64
+}
+
+// Area finds the area of a triangle.
+func (t Triangle) Area() float64 {
+	return 0.5 * t.Base * t.Height
+}
+
+// Perimeter finds the perimeter of a triangle.
+func (t Triangle) Perimeter() float64 {
+	return t.FirstSide + t.SecondSide + t.Base
+}
