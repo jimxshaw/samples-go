@@ -4,6 +4,11 @@ import (
 	"math"
 )
 
+// Shape has to have a way to calculate area.
+type Shape interface {
+	Area() float64
+}
+
 // Rectangle must have a width and height.
 type Rectangle struct {
 	Width  float64
