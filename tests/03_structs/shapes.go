@@ -1,17 +1,31 @@
 package main
 
-// Rectangle has four sides.
+import (
+	"math"
+)
+
+// Rectangle must have a width and height.
 type Rectangle struct {
 	Width  float64
 	Height float64
 }
 
+// Area finds the area of a rectangle.
+func (r Rectangle) Area() float64 {
+	return r.Width * r.Height
+}
+
+// Circle must have a radius.
+type Circle struct {
+	Radius float64
+}
+
+// Area finds the area of a circle.
+func (c Circle) Area() float64 {
+	return math.Pi * c.Radius * c.Radius
+}
+
 // Perimeter finds the perimeter of the shape.
 func Perimeter(rect Rectangle) float64 {
 	return 2 * (rect.Width + rect.Height)
-}
-
-// Area finds the area of the shape
-func Area(rect Rectangle) float64 {
-	return rect.Width * rect.Height
 }
