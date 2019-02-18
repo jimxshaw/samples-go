@@ -8,12 +8,12 @@ type Wallet struct {
 }
 
 // Deposit will deposit money
-func (w Wallet) Deposit(amount int) {
+func (w *Wallet) Deposit(amount int) {
 	fmt.Println("address of balance in Deposit is", &w.balance)
 	w.balance += amount
 }
 
 // Balance will show the balance
-func (w Wallet) Balance() int {
+func (w *Wallet) Balance() int {
 	return w.balance
 }
