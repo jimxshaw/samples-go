@@ -5,8 +5,10 @@ import (
 	"fmt"
 )
 
+// Bitcoin is an int type
 type Bitcoin int
 
+// Stringer is an interface
 type Stringer interface {
 	String() string
 }
@@ -26,10 +28,13 @@ func (w *Wallet) Deposit(amount Bitcoin) {
 	w.balance += amount
 }
 
+// ErrInsufficientFunds is a global variable
+var ErrInsufficientFunds = errors.New("cannot withdraw, insufficient funds")
+
 // Withdraw will take out money
 func (w *Wallet) Withdraw(amount Bitcoin) error {
 	if amount > w.balance {
-		return errors.New("cannot withdraw, insufficient funds")
+		return ErrInsufficientFunds
 	}
 
 	w.balance -= amount
