@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Bitcoin int
 
@@ -24,8 +27,13 @@ func (w *Wallet) Deposit(amount Bitcoin) {
 }
 
 // Withdraw will take out money
-func (w *Wallet) Withdraw(amount Bitcoin) {
+func (w *Wallet) Withdraw(amount Bitcoin) error {
+	if amount > w.balance {
+		return errors.New("Withdraw amount greater than balance")
+	}
+
 	w.balance -= amount
+	return nil
 }
 
 // Balance will show the balance
