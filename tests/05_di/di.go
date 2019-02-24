@@ -1,15 +1,16 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
+	"io"
+	"os"
 )
 
 // Greet returns hello plus argument
-func Greet(writer *bytes.Buffer, name string) {
+func Greet(writer io.Writer, name string) {
 	fmt.Fprintf(writer, "Hello, %s", name)
 }
 
 func main() {
-	//Greet("James")
+	Greet(os.Stdout, "James")
 }
