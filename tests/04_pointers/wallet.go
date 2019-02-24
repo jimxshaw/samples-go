@@ -29,7 +29,7 @@ func (w *Wallet) Deposit(amount Bitcoin) {
 // Withdraw will take out money
 func (w *Wallet) Withdraw(amount Bitcoin) error {
 	if amount > w.balance {
-		return errors.New("Withdraw amount greater than balance")
+		return errors.New("cannot withdraw, insufficient funds")
 	}
 
 	w.balance -= amount
