@@ -7,8 +7,20 @@ import (
 	"time"
 )
 
+type Sleeper interface {
+	Sleep()
+}
+
+type SpySleeper struct {
+	Calls int
+}
+
 const finalWord = "Go!"
 const countdownStart = 3
+
+func (s *SpySleeper) Sleep() {
+	s.Calls++
+}
 
 // Countdown counts down
 func Countdown(out io.Writer) {
