@@ -16,9 +16,13 @@ Answer the following questions
 
 - What kind of loop doesn’t exist in Go?
 
+do-while
+
 2. Read about the `fmt` _package_
 
 - What does `fmt.Println()` return?
+
+the number of bytes written
 
 3. Find a _blog post_ about the recent release of Go 1.13
 
