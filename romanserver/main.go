@@ -7,9 +7,20 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/jimxshaw/samples-go/romanserver/data"
 )
+
+var numberals = map[int]string{
+	1:  "I",
+	2:  "II",
+	3:  "III",
+	4:  "IV",
+	5:  "V",
+	6:  "VI",
+	7:  "VII",
+	8:  "VIII",
+	9:  "IX",
+	10: "X",
+}
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -19,7 +30,7 @@ func main() {
 			num, _ := strconv.Atoi(strings.TrimSpace(urlPath[2]))
 
 			if num >= 1 && num <= 10 {
-				fmt.Fprintf(w, "%q", html.EscapeString(data.Numberals[num]))
+				fmt.Fprintf(w, "%q", html.EscapeString(numberals[num]))
 			} else {
 				w.WriteHeader(http.StatusNotFound)
 				w.Write([]byte("404 - Not Found"))
@@ -38,5 +49,5 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	s.ListenAndServer()
+	s.ListenAndServe()
 }
