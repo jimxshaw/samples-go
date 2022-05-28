@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -28,4 +29,13 @@ func main() {
 			w.Write([]byte("400 - Bad Request"))
 		}
 	})
+
+	s := &http.Server{
+		Addr: ":8080",
+		ReadTimeout: 5 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+
+	s.ListenAndServer()
 }
