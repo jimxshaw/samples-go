@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/jimxshaw/samples-go/romanserver/data"
 	"html"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jimxshaw/samples-romanserver/data"
 )
 
 func main() {
@@ -31,9 +32,9 @@ func main() {
 	})
 
 	s := &http.Server{
-		Addr: ":8080",
-		ReadTimeout: 5 * time.Second,
-		WriteTimeout: 5 * time.Second,
+		Addr:           ":8080",
+		ReadTimeout:    5 * time.Second,
+		WriteTimeout:   5 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
