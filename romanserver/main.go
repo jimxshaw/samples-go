@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jimxshaw/samples-romanserver/data"
+	"github.com/jimxshaw/samples-go/romanserver/data"
 )
 
 func main() {
