@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 )
 
 // Build a container from scratch.
@@ -19,6 +20,14 @@ func main() {
 
 func run() {
 	fmt.Printf("Running %v\n", os.Args[2:])
+
+	// Run a command and its arguments.
+	cmd := exec.Command(os.Args[2], os.Args[3:]...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	cmd.Run()
 }
 
 func must(err error) {
