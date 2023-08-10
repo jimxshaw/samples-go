@@ -28,7 +28,9 @@ func githubInfo(login string) (string, int, error) {
 		return "", 0, fmt.Errorf("%#v - %s", url, resp.Status)
 	}
 
-	fmt.Printf("Content-Type: %s\n", resp.Header.Get("Content-Type"))
+	defer resp.Body.Close()
+
+	//fmt.Printf("Content-Type: %s\n", resp.Header.Get("Content-Type"))
 	// if _, err := io.Copy(os.Stdout, resp.Body); err != nil {
 	// 	log.Fatalf("error: can't copy - %s", err)
 	// }
