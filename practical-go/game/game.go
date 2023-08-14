@@ -1,27 +1,84 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 const (
 	maxX = 1000
 	maxY = 500
 )
 
-// Item is an item in the game
+// Item is an item in the game.
 type Item struct {
 	X int
 	Y int
 }
 
-// Player represents a user of an Item
+// Player represents a user of an Item.
 type Player struct {
 	Name string
 	Item // embeds Item
+	Keys []Key
 }
 
 type mover interface {
 	// Move(int, int)
 	Move(x, y int)
+}
+
+type Key byte
+
+// Go's version of "enum"
+const (
+	Jade Key = iota + 1
+	Copper
+	Crystal
+	invalidKey // internal, not exported
+)
+
+// String implements fmt.Stringer interface.
+func (k Key) String() string {
+	switch k {
+	case Jade:
+		return "jade"
+	case Copper:
+		return "copper"
+	case Crystal:
+		return "crystal"
+	}
+
+	return fmt.Sprintf("<Key %d>", k)
+}
+
+// func (p *Player) FoundKey(k Key) error {
+// 	if !slices.Contains(p.Keys, k) {
+// 		p.Keys = append(p.Keys, k)
+// 		return nil
+// 	} else {
+// 		return fmt.Errorf("input %d is not one of the known keys", k)
+// 	}
+// }
+
+func (p *Player) FoundKey(k Key) error {
+	if k < Jade || k >= invalidKey {
+		return fmt.Errorf("invalid key: %#v", k)
+	}
+
+	if !containsKey(p.Keys, k) {
+		p.Keys = append(p.Keys, k)
+	}
+
+	return nil
+}
+
+func containsKey(keys []Key, k Key) bool {
+	for _, value := range keys {
+		if k == value {
+			return true
+		}
+	}
+	return false
 }
 
 // func NewItem(x, y int) Item {
@@ -56,7 +113,7 @@ func moveAll(ms []mover, x, y int) {
 	}
 }
 
-// Rule of Thumb: generally, methods should accept interfaces and return types
+// Rule of Thumb: generally, methods should accept interfaces and return types.
 
 func main() {
 	var i1 Item
@@ -101,4 +158,17 @@ func main() {
 	for _, m := range ms {
 		fmt.Println(m)
 	}
+
+	k := Jade
+	fmt.Println("k:", k.String())
+	fmt.Println("key: ", Key(11))
+
+	// Go prints out time.Time as a string because it
+	// implements json.Marshaler interface.
+	// json.NewEncoder(os.Stdout).Encode(time.Now())
+
+	p1.FoundKey(Jade)
+	fmt.Println(p1.Keys)
+	p1.FoundKey(Jade)
+	fmt.Println(p1.Keys)
 }
