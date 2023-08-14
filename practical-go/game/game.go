@@ -1,10 +1,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
-	"time"
 )
 
 const (
@@ -168,5 +165,10 @@ func main() {
 
 	// Go prints out time.Time as a string because it
 	// implements json.Marshaler interface.
-	json.NewEncoder(os.Stdout).Encode(time.Now())
+	// json.NewEncoder(os.Stdout).Encode(time.Now())
+
+	p1.FoundKey(Jade)
+	fmt.Println(p1.Keys)
+	p1.FoundKey(Jade)
+	fmt.Println(p1.Keys)
 }
