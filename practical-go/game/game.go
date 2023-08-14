@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	"golang.org/x/exp/slices"
 )
 
 const (
@@ -34,7 +36,7 @@ const (
 	Jade Key = iota + 1
 	Copper
 	Crystal
-	invalidKey // internal, not exported
+	invalidKey // sentinel value: it's internal, not exported
 )
 
 // String implements fmt.Stringer interface.
@@ -51,14 +53,14 @@ func (k Key) String() string {
 	return fmt.Sprintf("<Key %d>", k)
 }
 
-// func (p *Player) FoundKey(k Key) error {
-// 	if !slices.Contains(p.Keys, k) {
-// 		p.Keys = append(p.Keys, k)
-// 		return nil
-// 	} else {
-// 		return fmt.Errorf("input %d is not one of the known keys", k)
-// 	}
-// }
+func (p *Player) FoundKey2(k Key) error {
+	if !slices.Contains(p.Keys, k) {
+		p.Keys = append(p.Keys, k)
+		return nil
+	} else {
+		return fmt.Errorf("input %d is not one of the known keys", k)
+	}
+}
 
 func (p *Player) FoundKey(k Key) error {
 	if k < Jade || k >= invalidKey {
@@ -170,5 +172,10 @@ func main() {
 	p1.FoundKey(Jade)
 	fmt.Println(p1.Keys)
 	p1.FoundKey(Jade)
+	fmt.Println(p1.Keys)
+
+	p1.FoundKey2(Jade)
+	fmt.Println(p1.Keys)
+	p1.FoundKey2(Jade)
 	fmt.Println(p1.Keys)
 }
