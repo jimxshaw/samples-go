@@ -43,7 +43,12 @@ func main() {
 	fmt.Println(max([]float64{3, 1, 2}))
 }
 
-func max[T int | float64](nums []T) T {
+type Number interface {
+	int | float64
+}
+
+// func max[T int | float64](nums []T) T {
+func max[T Number](nums []T) T {
 	if len(nums) == 0 {
 		return 0
 	}
