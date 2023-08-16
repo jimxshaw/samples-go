@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"regexp"
 )
 
 // Q: What is the most common word (ignore case) in sherlock.txt?
@@ -19,6 +20,12 @@ func main() {
 	defer file.Close()
 	wordFrequency(file)
 }
+
+// Variables will execute before main.
+var wordRegex = regexp.MustCompile(`[a-zA-Z]+`)
+
+// The init function will also execute before main.
+// func init() {}
 
 func wordFrequency(r io.Reader) (map[string]int, error) {
 	s := bufio.NewScanner(r)
