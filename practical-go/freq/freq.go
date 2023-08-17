@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 )
 
 // Q: What is the most common word (ignore case) in sherlock.txt?
@@ -78,14 +79,12 @@ var wordRegex = regexp.MustCompile(`[a-zA-Z]+`)
 
 func wordFrequency(r io.Reader) (map[string]int, error) {
 	s := bufio.NewScanner(r)
-	lnum := 0
+	freqs := make(map[string]int) // word -> count
 
 	for s.Scan() {
-		lnum++
 		words := wordRegex.FindAllString(s.Text(), -1) // current line
-		if len(words) != 0 {
-			fmt.Println(words)
-			break
+		for _, w := range words {
+			freqs[strings.ToLower(w)]++
 		}
 	}
 
@@ -93,7 +92,5 @@ func wordFrequency(r io.Reader) (map[string]int, error) {
 		return nil, err
 	}
 
-	fmt.Println("num lines: ", lnum)
-
-	return nil, nil
+	return freqs, nil
 }
