@@ -19,9 +19,15 @@ func main() {
 		log.Fatalf("error: %s", err)
 	}
 	defer file.Close()
-	wordFrequency(file)
 
-	mapDemo()
+	w, err := mostCommon(file)
+	if err != nil {
+		log.Fatalf("error: %s", err)
+	}
+
+	fmt.Println("most common: ", w)
+
+	//mapDemo()
 
 	// `s` is a "raw" string where \ is just a \
 	// rather than escape character like \n.
@@ -35,6 +41,30 @@ var wordRegex = regexp.MustCompile(`[a-zA-Z]+`)
 
 // The init function will also execute before main.
 // func init() {}
+
+func mostCommon(r io.Reader) (string, error) {
+	freqs, err := wordFrequency(r)
+	if err != nil {
+		log.Fatalf("error: %s", err)
+	}
+
+	return maxWord(freqs)
+}
+
+func maxWord(freqs map[string]int) (string, error) {
+	if len(freqs) == 0 {
+		return "", fmt.Errorf("empty map")
+	}
+
+	maxN, maxW := 0, ""
+	for word, count := range freqs {
+		if count > maxN {
+			maxN, maxW = count, word
+		}
+	}
+
+	return maxW, nil
+}
 
 func wordFrequency(r io.Reader) (map[string]int, error) {
 	s := bufio.NewScanner(r)
