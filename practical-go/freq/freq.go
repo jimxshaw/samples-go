@@ -29,6 +29,31 @@ func main() {
 	fmt.Println(path)
 }
 
+// Variables will execute before main.
+// "What's your name?" -> [What s your name]
+var wordRegex = regexp.MustCompile(`[a-zA-Z]+`)
+
+// The init function will also execute before main.
+// func init() {}
+
+func wordFrequency(r io.Reader) (map[string]int, error) {
+	s := bufio.NewScanner(r)
+	freqs := make(map[string]int) // word -> count
+
+	for s.Scan() {
+		words := wordRegex.FindAllString(s.Text(), -1) // current line
+		for _, w := range words {
+			freqs[strings.ToLower(w)]++
+		}
+	}
+
+	if err := s.Err(); err != nil {
+		return nil, err
+	}
+
+	return freqs, nil
+}
+
 func mapDemo() {
 	var stocks map[string]float64 // symbol -> count
 	sym := "GOOG"
@@ -68,29 +93,4 @@ func mapDemo() {
 	fmt.Println(stocks)
 	// fmt.Printf("%p\n", &stocks) // must use Printf for actual memory address
 	delete(stocks, "AAPL") // no panic
-}
-
-// Variables will execute before main.
-// "What's your name?" -> [What s your name]
-var wordRegex = regexp.MustCompile(`[a-zA-Z]+`)
-
-// The init function will also execute before main.
-// func init() {}
-
-func wordFrequency(r io.Reader) (map[string]int, error) {
-	s := bufio.NewScanner(r)
-	freqs := make(map[string]int) // word -> count
-
-	for s.Scan() {
-		words := wordRegex.FindAllString(s.Text(), -1) // current line
-		for _, w := range words {
-			freqs[strings.ToLower(w)]++
-		}
-	}
-
-	if err := s.Err(); err != nil {
-		return nil, err
-	}
-
-	return freqs, nil
 }
