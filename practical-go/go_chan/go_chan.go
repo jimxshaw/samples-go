@@ -64,6 +64,15 @@ func main() {
 		fmt.Println("got: ", msg)
 	}
 
+	// The for range loop over a channel essentially does this.
+	// for {
+	// 	msg, ok := <-ch
+	// 	if !ok {
+	// 		break
+	// 	}
+	// 	fmt.Println("got: ", msg)
+	// }
+
 	result := <-ch // closed channel
 	fmt.Printf("closed: %#v\n", result)
 
