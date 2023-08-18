@@ -39,7 +39,22 @@ func main() {
 	time.Sleep(10 * time.Millisecond)
 
 	shadowExample()
+
+	// Channel only has 2 operations
+	ch := make(chan string)
+	go func() {
+		// Think of a channel as a conveyor belt where a worker, goroutine,
+		// puts an item on the conveyor, in this case a string.
+		ch <- "hello!" // Send operation
+	}()
+	// The main goroutine is there to receive the item from the conveyor.
+	msg := <-ch // Receive operation
+
+	fmt.Println(msg)
 }
+
+// Channel Semantics
+// Send & Receive will block until opposite operation (*).
 
 func shadowExample() {
 	n := 4
