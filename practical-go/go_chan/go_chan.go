@@ -51,10 +51,29 @@ func main() {
 	msg := <-ch // Receive operation
 
 	fmt.Println(msg)
+
+	go func() {
+		for i := 0; i < 3; i++ {
+			msg := fmt.Sprintf("message #%d", i+1)
+			ch <- msg
+		}
+		close(ch)
+	}()
+
+	for msg := range ch {
+		fmt.Println("got: ", msg)
+	}
+
+	result := <-ch // closed channel
+	fmt.Printf("closed: %#v\n", result)
+
+	result, ok := <-ch // closed channel
+	fmt.Printf("closed: %#v (ok = %v)\n", result, ok)
 }
 
 // Channel Semantics
 // Send & Receive will block until opposite operation (*).
+// Receive from a closed channel will return the zero value without blocking.
 
 func shadowExample() {
 	n := 4
