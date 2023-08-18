@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -20,7 +21,7 @@ func main() {
 	}
 	defer file.Close()
 
-	w, err := mostCommon(file)
+	w, err := mostCommon(file, 5)
 	if err != nil {
 		log.Fatalf("error: %s", err)
 	}
@@ -42,13 +43,31 @@ var wordRegex = regexp.MustCompile(`[a-zA-Z]+`)
 // The init function will also execute before main.
 // func init() {}
 
-func mostCommon(r io.Reader) (string, error) {
+func mostCommon(r io.Reader, n int) ([]string, error) {
 	freqs, err := wordFrequency(r)
 	if err != nil {
 		log.Fatalf("error: %s", err)
 	}
 
-	return maxWord(freqs)
+	keys := make([]string, 0, len(freqs))
+
+	for k := range freqs {
+		keys = append(keys, k)
+	}
+
+	sort.SliceStable(keys, func(i, j int) bool {
+		return freqs[keys[i]] > freqs[keys[j]]
+	})
+
+	result := []string{}
+
+	for i := 0; i < n; i++ {
+		result = append(result, keys[i])
+	}
+
+	return result, nil
+
+	// return maxWord(freqs)
 }
 
 func maxWord(freqs map[string]int) (string, error) {
