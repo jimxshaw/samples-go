@@ -87,6 +87,21 @@ func main() {
 // Receive from a closed channel will return the zero value without blocking.
 // Send to a closed channel will panic.
 // Closing a closed channel will also panic.
+// Send/Receive to a nil channel will block forever.
+
+// Operation -> Channel State -> Result
+// send -> open -> block until a receive (1)
+// receive -> open -> block until a send
+// close -> open -> closed
+// send -> closed -> panic
+// receive -> closed -> zero value without blocking (2)
+// close -> close -> panic
+// send -> nil -> block forever
+// receive -> nil -> block forever
+// close -> nil -> panic
+
+// (1) A buffered channel has "n" sends without blocking.
+// (2) Use val, ok := <- ch to check if channel was closed.
 
 func shadowExample() {
 	n := 4
