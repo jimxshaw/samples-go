@@ -78,11 +78,15 @@ func main() {
 
 	result, ok := <-ch // closed channel
 	fmt.Printf("closed: %#v (ok = %v)\n", result, ok)
+
+	// ch <- "another message" // If ch is closed then it will panic.
 }
 
 // Channel Semantics
 // Send & Receive will block until opposite operation (*).
 // Receive from a closed channel will return the zero value without blocking.
+// Send to a closed channel will panic.
+// Closing a closed channel will also panic.
 
 func shadowExample() {
 	n := 4
