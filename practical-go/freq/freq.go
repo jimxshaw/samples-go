@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -27,6 +28,13 @@ func main() {
 
 	fmt.Println("most common: ", w)
 
+	ws, err := mostCommonGroup(file, 5)
+	if err != nil {
+		log.Fatalf("error: %s", err)
+	}
+
+	fmt.Println("most common group: ", ws)
+
 	//mapDemo()
 
 	// `s` is a "raw" string where \ is just a \
@@ -42,10 +50,33 @@ var wordRegex = regexp.MustCompile(`[a-zA-Z]+`)
 // The init function will also execute before main.
 // func init() {}
 
-func mostCommon(r io.Reader) (string, error) {
+func mostCommonGroup(r io.ReadSeeker, n int) ([]string, error) {
 	freqs, err := wordFrequency(r)
 	if err != nil {
-		log.Fatalf("error: %s", err)
+		return nil, err
+	}
+
+	keys := make([]string, 0, len(freqs))
+
+	for k := range freqs {
+		keys = append(keys, k)
+	}
+
+	sort.Slice(keys, func(i, j int) bool {
+		return freqs[keys[i]] > freqs[keys[j]]
+	})
+
+	if n > len(keys) {
+		n = len(keys)
+	}
+
+	return keys[:n], nil
+}
+
+func mostCommon(r io.ReadSeeker) (string, error) {
+	freqs, err := wordFrequency(r)
+	if err != nil {
+		return "", err
 	}
 
 	return maxWord(freqs)
@@ -66,7 +97,12 @@ func maxWord(freqs map[string]int) (string, error) {
 	return maxW, nil
 }
 
-func wordFrequency(r io.Reader) (map[string]int, error) {
+func wordFrequency(r io.ReadSeeker) (map[string]int, error) {
+	// Reset the read position of the file to the start
+	if _, err := r.Seek(0, io.SeekStart); err != nil {
+		return nil, err
+	}
+
 	s := bufio.NewScanner(r)
 	freqs := make(map[string]int) // word -> count
 
