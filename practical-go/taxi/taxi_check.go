@@ -94,19 +94,58 @@ func main() {
 	}
 
 	start := time.Now()
-	ok := true
-	for name, signature := range sigs {
-		fileName := path.Join(filepath.Dir(targetPath), name) + ".bz2"
-		sig, err := fileSig(fileName)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "error: %s - %s\n", fileName, err)
-			ok = false
-			continue
-		}
 
-		if sig != signature {
+	// // ORIGINAL CODE
+	// ok := true
+	// for name, signature := range sigs {
+	// 	fileName := path.Join(filepath.Dir(targetPath), name) + ".bz2"
+	// 	sig, err := fileSig(fileName)
+	// 	if err != nil {
+	// 		fmt.Fprintf(os.Stderr, "error: %s - %s\n", fileName, err)
+	// 		ok = false
+	// 		continue
+	// 	}
+
+	// 	if sig != signature {
+	// 		ok = false
+	// 		fmt.Printf("error: %s mismatch\n", fileName)
+	// 	}
+	// }
+
+	// REFACTOR
+	resultsCh := make(chan Result, len(sigs))
+
+	for name, signature := range sigs {
+		go func(nm string, sg string) {
+			fileName := path.Join(filepath.Dir(targetPath), nm) + ".bz2"
+			sig, err := fileSig(fileName)
+
+			result := Result{
+				FileName: fileName,
+			}
+
+			if err != nil {
+				result.Err = err
+			} else if sig != sg {
+				result.Mismatch = true
+			}
+
+			resultsCh <- result
+		}(name, signature)
+
+	}
+
+	// REFACTOR
+	ok := true
+	for range sigs {
+		result := <-resultsCh
+
+		if result.Err != nil {
+			fmt.Fprintf(os.Stderr, "error: %s - %s\n", result.FileName, result.Err)
 			ok = false
-			fmt.Printf("error: %s mismatch\n", fileName)
+		} else if result.Mismatch {
+			fmt.Printf("error: %s mismatch\n", result.FileName)
+			ok = false
 		}
 	}
 
@@ -115,4 +154,10 @@ func main() {
 	if !ok {
 		os.Exit(1)
 	}
+}
+
+type Result struct {
+	FileName string
+	Mismatch bool
+	Err      error
 }
