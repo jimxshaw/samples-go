@@ -113,26 +113,13 @@ func main() {
 	// }
 
 	// REFACTOR
-	resultsCh := make(chan Result, len(sigs))
+	resultsCh := make(chan result, len(sigs))
 
 	for name, signature := range sigs {
 		go func(nm string, sg string) {
 			fileName := path.Join(filepath.Dir(targetPath), nm) + ".bz2"
-			sig, err := fileSig(fileName)
-
-			result := Result{
-				FileName: fileName,
-			}
-
-			if err != nil {
-				result.Err = err
-			} else if sig != sg {
-				result.Mismatch = true
-			}
-
-			resultsCh <- result
+			sigWorker(fileName, sg, resultsCh)
 		}(name, signature)
-
 	}
 
 	// REFACTOR
@@ -156,7 +143,22 @@ func main() {
 	}
 }
 
-type Result struct {
+func sigWorker(fileName, signature string, ch chan result) {
+	r := result{
+		FileName: fileName,
+	}
+
+	sig, err := fileSig(fileName)
+	if err != nil {
+		r.Err = err
+	} else if sig != signature {
+		r.Mismatch = true
+	}
+
+	ch <- r
+}
+
+type result struct {
 	FileName string
 	Mismatch bool
 	Err      error
