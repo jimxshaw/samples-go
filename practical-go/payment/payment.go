@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 func main() {
@@ -18,12 +19,17 @@ func main() {
 }
 
 func (p *Payment) Process() {
+	t := time.Now()
+
 	// Idempotent operation.
-	p.once.Do(p.process)
+	// Anonymous function must be used because
+	// Do argument must be parameterless.
+	p.once.Do(func() { p.process(t) })
 }
 
-func (p *Payment) process() {
-	fmt.Printf("%s -> $%.2f -> %s\n", p.From, p.Amount, p.To)
+func (p *Payment) process(t time.Time) {
+	ts := t.Format(time.RFC3339)
+	fmt.Printf("[%s] %s -> $%.2f -> %s\n", ts, p.From, p.Amount, p.To)
 }
 
 type Payment struct {
