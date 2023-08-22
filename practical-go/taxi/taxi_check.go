@@ -141,7 +141,10 @@ func main() {
 	}
 }
 
-func sigWorker(fileName, signature string, ch chan result) {
+// Sending Channel: ch chan <- result
+// Receiving Channel: ch <- chan result
+// Either Channel: ch chan result
+func sigWorker(fileName, signature string, ch chan<- result) {
 	r := result{
 		FileName: fileName,
 	}
