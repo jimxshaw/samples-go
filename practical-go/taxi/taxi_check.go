@@ -116,10 +116,8 @@ func main() {
 	resultsCh := make(chan result, len(sigs))
 
 	for name, signature := range sigs {
-		go func(nm string, sg string) {
-			fileName := path.Join(filepath.Dir(targetPath), nm) + ".bz2"
-			sigWorker(fileName, sg, resultsCh)
-		}(name, signature)
+		fileName := path.Join(filepath.Dir(targetPath), name) + ".bz2"
+		go sigWorker(fileName, signature, resultsCh)
 	}
 
 	// REFACTOR
