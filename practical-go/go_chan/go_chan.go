@@ -101,6 +101,8 @@ func main() {
 	fmt.Printf("closed: %#v (ok = %v)\n", result, ok)
 
 	// ch <- "another message" // If ch is closed then it will panic.
+
+	fmt.Println(sleepSort([]int{5, 2, 7, 22, 9}))
 }
 
 // For every "n" in values, spin a goroutine that will
@@ -117,9 +119,11 @@ func sleepSort(values []int) []int {
 		}(n)
 	}
 
-	result := []int{}
-	for i := 0; i < len(values); i++ {
-		result = append(result, <-ch)
+	var result []int
+	// for i := 0; i < len(values); i++ {
+	for range values {
+		n := <-ch
+		result = append(result, n)
 	}
 
 	return result
