@@ -5,6 +5,27 @@ import (
 	"time"
 )
 
+// Channel Semantics
+// Send & Receive will block until opposite operation (*).
+// Receive from a closed channel will return the zero value without blocking.
+// Send to a closed channel will panic.
+// Closing a closed channel will also panic.
+// Send/Receive to a nil channel will block forever.
+
+// Operation -> Channel State -> Result
+// send -> open -> block until a receive (1)
+// receive -> open -> block until a send
+// close -> open -> closed
+// send -> closed -> panic
+// receive -> closed -> zero value without blocking (2)
+// close -> close -> panic
+// send -> nil -> block forever
+// receive -> nil -> block forever
+// close -> nil -> panic
+
+// (1) A buffered channel has "n" sends without blocking.
+// (2) Use val, ok := <- ch to check if channel was closed.
+
 func main() {
 	go fmt.Println("goroutine")
 	fmt.Println("main")
@@ -82,26 +103,27 @@ func main() {
 	// ch <- "another message" // If ch is closed then it will panic.
 }
 
-// Channel Semantics
-// Send & Receive will block until opposite operation (*).
-// Receive from a closed channel will return the zero value without blocking.
-// Send to a closed channel will panic.
-// Closing a closed channel will also panic.
-// Send/Receive to a nil channel will block forever.
+// For every "n" in values, spin a goroutine that will
+// - sleep "n" milliseconds
+// - send "n" over a channel
+// In the function body, collect values from the channel to a slice and return it.
+func sleepSort(values []int) []int {
+	ch := make(chan int, len(values))
 
-// Operation -> Channel State -> Result
-// send -> open -> block until a receive (1)
-// receive -> open -> block until a send
-// close -> open -> closed
-// send -> closed -> panic
-// receive -> closed -> zero value without blocking (2)
-// close -> close -> panic
-// send -> nil -> block forever
-// receive -> nil -> block forever
-// close -> nil -> panic
+	for _, n := range values {
+		go func(num int) {
+			time.Sleep(time.Duration(num) * time.Millisecond)
+			ch <- num
+		}(n)
+	}
 
-// (1) A buffered channel has "n" sends without blocking.
-// (2) Use val, ok := <- ch to check if channel was closed.
+	result := []int{}
+	for i := 0; i < len(values); i++ {
+		result = append(result, <-ch)
+	}
+
+	return result
+}
 
 func shadowExample() {
 	n := 4
