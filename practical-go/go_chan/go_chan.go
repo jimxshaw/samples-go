@@ -7,6 +7,7 @@ import (
 
 // Channel Semantics
 // Send & Receive will block until opposite operation (*).
+//		- Buffered channel has cap(n) send operations without blocking.
 // Receive from a closed channel will return the zero value without blocking.
 // Send to a closed channel will panic.
 // Closing a closed channel will also panic.
