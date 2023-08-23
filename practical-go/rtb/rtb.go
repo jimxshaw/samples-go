@@ -9,7 +9,6 @@ import (
 
 func main() {
 	// We have 50 msec to return an answer
-	// TODO
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 	defer cancel()
 	url := "http://go.dev"
