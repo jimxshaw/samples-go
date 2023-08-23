@@ -25,7 +25,9 @@ func main() {
 		fmt.Println("ch2:", val)
 	case <-time.After(5 * time.Millisecond):
 		println("timeout")
+		// default: // optional
+		// 	println("this is the default")
 	}
 
-	// select {} // Blocks forever.
+	// select {} // Blocks forever without consuming CPU.
 }
