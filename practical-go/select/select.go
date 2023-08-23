@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"time"
 )
@@ -18,13 +19,18 @@ func main() {
 		ch2 <- 2
 	}()
 
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Millisecond)
+	defer cancel()
+
 	select {
 	case val := <-ch1:
 		fmt.Println("ch1:", val)
 	case val := <-ch2:
 		fmt.Println("ch2:", val)
-	case <-time.After(5 * time.Millisecond):
-		println("timeout")
+	// case <-time.After(5 * time.Millisecond):
+	// 	fmt.Println("timeout")
+	case <-ctx.Done():
+		fmt.Println("timeout")
 		// default: // optional
 		// 	println("this is the default")
 	}
