@@ -18,7 +18,8 @@ func main() {
 
 // If algo didn't finish in time, return a default bid
 func bidOn(ctx context.Context, url string) Bid {
-	ch := make(chan Bid)
+	// Buffered channel to prevent goroutine leak.
+	ch := make(chan Bid, 1)
 
 	go func() {
 		b := bestBid(url)
