@@ -1,8 +1,9 @@
 package nlp
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestTokenize(t *testing.T) {
@@ -10,8 +11,11 @@ func TestTokenize(t *testing.T) {
 	expected := []string{"hello", "there"}
 	tokens := Tokenize(text)
 
+	require.Equal(t, expected, tokens)
+
+	// Before using testify:
 	// if tokens != expected { // Cannot compare slices with == in Go (only to nil)
-	if !reflect.DeepEqual(expected, tokens) {
-		t.Fatalf("expected %#v, got %#v", expected, tokens)
-	}
+	// if !reflect.DeepEqual(expected, tokens) {
+	// 	t.Fatalf("expected %#v, got %#v", expected, tokens)
+	// }
 }
