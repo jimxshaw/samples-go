@@ -13,3 +13,11 @@ func ExampleTokenize() {
 	//Output:
 	// [hello there]
 }
+
+/*
+Test discovery:
+For every file ending with _test.go, run every function that matches either:
+
+- Example[A-Z_].*
+- Test[A-Z_].*
+*/
