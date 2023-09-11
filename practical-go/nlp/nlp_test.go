@@ -1,7 +1,6 @@
 package nlp
 
 import (
-	"os"
 	"testing"
 
 	"github.com/BurntSushi/toml"
@@ -23,14 +22,17 @@ type tokenizeCase struct {
 }
 
 func loadTokenizeCases(t *testing.T) []tokenizeCase {
-	data, err := os.ReadFile("tokenize_cases.toml")
-	require.NoError(t, err, "Read file")
-
 	var testCases struct {
 		Cases []tokenizeCase
 	}
 
-	toml.Unmarshal(data, &testCases)
+	// Decode by reading the file then use Unmarshal.
+	// data, err := os.ReadFile("tokenize_cases.toml")
+	// require.NoError(t, err, "Read file")
+	// toml.Unmarshal(data, &testCases)
+
+	// Decode the file directly with DecodeFile.
+	_, err := toml.DecodeFile("tokenize_cases.toml", &testCases)
 	require.NoError(t, err, "Unmarshal TOML")
 
 	return testCases.Cases
