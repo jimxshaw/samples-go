@@ -3,6 +3,7 @@ module samples-go/practical-go
 go 1.21
 
 require (
+	github.com/BurntSushi/toml v1.3.2
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb
 )
