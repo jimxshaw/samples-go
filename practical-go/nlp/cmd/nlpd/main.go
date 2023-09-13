@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"expvar"
 	"fmt"
 	"io"
 	"log"
@@ -11,6 +12,11 @@ import (
 
 	"samples-go/practical-go/nlp"
 	"samples-go/practical-go/nlp/stemmer"
+)
+
+var (
+	// metrics: http://localhost:8080/debug/vars
+	numTok = expvar.NewInt("tokenize.calls")
 )
 
 func main() {
@@ -64,6 +70,8 @@ func (s *Server) tokenizeHandler(w http.ResponseWriter, r *http.Request) {
 	// 	http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 	// 	return
 	// }
+
+	numTok.Add(1)
 
 	// Get, convert and validate the data.
 	// In Production, do not just read everything. Add a limit.
