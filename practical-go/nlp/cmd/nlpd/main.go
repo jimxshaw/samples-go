@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"samples-go/practical-go/nlp"
+	"samples-go/practical-go/nlp/stemmer"
 )
 
 func main() {
@@ -21,6 +22,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/health", healthHandler).Methods(http.MethodGet)
 	r.HandleFunc("/tokenize", tokenizeHandler).Methods(http.MethodPost)
+	r.HandleFunc("/stem/{word}", stemHandler).Methods(http.MethodGet)
 	http.Handle("/", r)
 
 	// Run server.
@@ -31,6 +33,14 @@ func main() {
 
 type response struct {
 	Tokens []string `json:"tokens"`
+}
+
+func stemHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	word := vars["word"]
+	stem := stemmer.Stem(word)
+
+	fmt.Fprintln(w, stem)
 }
 
 // tokenizeHandler will read the text from the request body
