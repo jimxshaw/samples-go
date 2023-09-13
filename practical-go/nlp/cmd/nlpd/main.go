@@ -37,9 +37,18 @@ func tokenizeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get, convert and validate the data.
-	bodyBytes, err := io.ReadAll(r.Body)
+	defer r.Body.Close()
+
+	// In Production, do not just read everything. Add a limit.
+	rdr := io.LimitReader(r.Body, 1_000_000)
+	bodyBytes, err := io.ReadAll(rdr)
 	if err != nil {
 		http.Error(w, "can't read", http.StatusBadRequest)
+		return
+	}
+
+	if len(bodyBytes) == 0 {
+		http.Error(w, "missing data", http.StatusBadRequest)
 		return
 	}
 
