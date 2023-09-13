@@ -53,8 +53,6 @@ func tokenizeHandler(w http.ResponseWriter, r *http.Request) {
 	// }
 
 	// Get, convert and validate the data.
-	defer r.Body.Close()
-
 	// In Production, do not just read everything. Add a limit.
 	rdr := io.LimitReader(r.Body, 1_000_000)
 	bodyBytes, err := io.ReadAll(rdr)
