@@ -1,6 +1,7 @@
 package nlp
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/BurntSushi/toml"
@@ -32,7 +33,7 @@ func loadTokenizeCases(t *testing.T) []tokenizeCase {
 	// toml.Unmarshal(data, &testCases)
 
 	// Decode the file directly with DecodeFile.
-	_, err := toml.DecodeFile("tokenize_cases.toml", &testCases)
+	_, err := toml.DecodeFile("./testdata/tokenize_cases.toml", &testCases)
 	require.NoError(t, err, "Unmarshal TOML")
 
 	return testCases.Cases
@@ -61,4 +62,19 @@ func TestTokenize(t *testing.T) {
 	// if !reflect.DeepEqual(expected, tokens) {
 	// 	t.Fatalf("expected %#v, got %#v", expected, tokens)
 	// }
+}
+
+// Fuzz testing will generate random text.
+// Fuzzing will run indefinitely unless you give a time limit.
+// go test -fuzz . -fuzztime 10s -v
+func FuzzTokenize(f *testing.F) {
+	f.Fuzz(func(t *testing.T, text string) {
+		tokens := Tokenize(text)
+		lText := strings.ToLower(text)
+		for _, tok := range tokens {
+			if !strings.Contains(lText, tok) {
+				t.Fatal(tok)
+			}
+		}
+	})
 }
