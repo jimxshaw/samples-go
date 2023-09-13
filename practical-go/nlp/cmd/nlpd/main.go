@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
+
 	"samples-go/practical-go/nlp"
 )
 
@@ -14,9 +16,12 @@ func main() {
 	// Routing.
 	// /health is an exact match.
 	// /health/ is a prefix match.
-	http.HandleFunc("/health", healthHandler)
-
-	http.HandleFunc("/tokenize", tokenizeHandler)
+	// http.HandleFunc("/health", healthHandler)
+	// http.HandleFunc("/tokenize", tokenizeHandler)
+	r := mux.NewRouter()
+	r.HandleFunc("/health", healthHandler).Methods(http.MethodGet)
+	r.HandleFunc("/tokenize", tokenizeHandler).Methods(http.MethodPost)
+	http.Handle("/", r)
 
 	// Run server.
 	if err := http.ListenAndServe(":8080", nil); err != nil {
@@ -31,10 +36,11 @@ type response struct {
 // tokenizeHandler will read the text from the request body
 // and return JSON in the format: "{"tokens": ["hello", "there"]}".
 func tokenizeHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
+	// Before using gorilla/mux:
+	// if r.Method != http.MethodPost {
+	// 	http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+	// 	return
+	// }
 
 	// Get, convert and validate the data.
 	defer r.Body.Close()
